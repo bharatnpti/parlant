@@ -18,6 +18,7 @@ import asyncio
 from contextlib import ExitStack, contextmanager
 import contextvars
 from enum import Enum, auto
+import json
 import logging
 from pathlib import Path
 import structlog
@@ -28,6 +29,34 @@ from typing_extensions import override
 
 from parlant.core.common import generate_id
 from parlant.core.contextual_correlator import ContextualCorrelator
+
+
+class JSONRenderer:
+    """Custom JSON renderer for OpenSearch compatibility."""
+
+    def __call__(self, logger: Any, name: str, event_dict: dict[str, Any]) -> str:
+        """Render log event as JSON string for OpenSearch."""
+
+        # Ensure timestamp is present
+        if "timestamp" not in event_dict:
+            event_dict["timestamp"] = time.time()
+
+        # Add service information
+        event_dict["service"] = "parlant"
+        event_dict["service_type"] = "ai_agent_framework"
+
+        # Ensure log level is present
+        if "level" not in event_dict:
+            event_dict["level"] = "trace"
+
+        # Add OpenSearch-specific fields
+        event_dict["@timestamp"] = event_dict.get("timestamp")
+        event_dict["log_level"] = event_dict.get("level")
+
+        # Clean up any None values
+        cleaned_dict = {k: v for k, v in event_dict.items() if v is not None}
+
+        return json.dumps(cleaned_dict, default=str, ensure_ascii=False)
 
 
 class LogLevel(Enum):
@@ -110,33 +139,33 @@ class Logger(ABC):
         ...
 
     @abstractmethod
-    def trace(self, message: str) -> None:
-        """Log a message at the TRACE level."""
+    def trace(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the TRACE level with optional structured fields."""
         ...
 
     @abstractmethod
-    def debug(self, message: str) -> None:
-        """Log a message at the DEBUG level."""
+    def debug(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the DEBUG level with optional structured fields."""
         ...
 
     @abstractmethod
-    def info(self, message: str) -> None:
-        """Log a message at the INFO level."""
+    def info(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the INFO level with optional structured fields."""
         ...
 
     @abstractmethod
-    def warning(self, message: str) -> None:
-        """Log a message at the WARNING level."""
+    def warning(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the WARNING level with optional structured fields."""
         ...
 
     @abstractmethod
-    def error(self, message: str) -> None:
-        """Log a message at the ERROR level."""
+    def error(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the ERROR level with optional structured fields."""
         ...
 
     @abstractmethod
-    def critical(self, message: str) -> None:
-        """Log a message at the CRITICAL level."""
+    def critical(self, message: str, **kwargs: Any) -> None:
+        """Log a message at the CRITICAL level with optional structured fields."""
         ...
 
     @abstractmethod
@@ -166,11 +195,19 @@ class CorrelationalLogger(Logger):
         correlator: ContextualCorrelator,
         log_level: LogLevel = LogLevel.DEBUG,
         logger_id: str | None = None,
+        output_format: str = "console",
     ) -> None:
         self._correlator = correlator
         self.raw_logger = logging.getLogger(logger_id or "parlant")
         self.raw_logger.setLevel(log_level.to_logging_level())
         self.log_level = log_level
+        self.output_format = output_format
+
+        # Choose renderer based on output format
+        if output_format == "json":
+            renderer = JSONRenderer()
+        else:
+            renderer = structlog.dev.ConsoleRenderer(colors=True)
 
         # Wrap it with structlog configuration
         self._logger = structlog.wrap_logger(
@@ -182,7 +219,7 @@ class CorrelationalLogger(Logger):
                 structlog.stdlib.PositionalArgumentsFormatter(),
                 structlog.processors.StackInfoRenderer(),
                 structlog.processors.format_exc_info,
-                structlog.dev.ConsoleRenderer(colors=True),
+                renderer,
             ],
             wrapper_class=structlog.make_filtering_bound_logger(0),
         )
@@ -201,33 +238,81 @@ class CorrelationalLogger(Logger):
         self.log_level = log_level
 
     @override
-    def trace(self, message: str) -> None:
+    def trace(self, message: str, **kwargs: Any) -> None:
         if self.log_level != LogLevel.TRACE:
             return
 
-        self._logger.debug(
-            f"TRACE {self._add_correlation_id_and_scopes(message)}",
-        )
+        if self.output_format == "json":
+            self._logger.debug(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.debug(
+                f"TRACE {self._add_correlation_id_and_scopes(message)}",
+            )
 
     @override
-    def debug(self, message: str) -> None:
-        self._logger.debug(self._add_correlation_id_and_scopes(message))
+    def debug(self, message: str, **kwargs: Any) -> None:
+        if self.output_format == "json":
+            self._logger.debug(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.debug(self._add_correlation_id_and_scopes(message))
 
     @override
-    def info(self, message: str) -> None:
-        self._logger.info(self._add_correlation_id_and_scopes(message))
+    def info(self, message: str, **kwargs: Any) -> None:
+        if self.output_format == "json":
+            self._logger.info(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.info(self._add_correlation_id_and_scopes(message))
 
     @override
-    def warning(self, message: str) -> None:
-        self._logger.warning(self._add_correlation_id_and_scopes(message))
+    def warning(self, message: str, **kwargs: Any) -> None:
+        if self.output_format == "json":
+            self._logger.warning(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.warning(self._add_correlation_id_and_scopes(message))
 
     @override
-    def error(self, message: str) -> None:
-        self._logger.error(self._add_correlation_id_and_scopes(message))
+    def error(self, message: str, **kwargs: Any) -> None:
+        if self.output_format == "json":
+            self._logger.error(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.error(self._add_correlation_id_and_scopes(message))
 
     @override
-    def critical(self, message: str) -> None:
-        self._logger.critical(self._add_correlation_id_and_scopes(message))
+    def critical(self, message: str, **kwargs: Any) -> None:
+        if self.output_format == "json":
+            self._logger.critical(
+                message,
+                correlation_id=self._correlator.correlation_id,
+                scopes=self._get_scopes(),
+                **kwargs,
+            )
+        else:
+            self._logger.critical(self._add_correlation_id_and_scopes(message))
 
     @override
     @contextmanager
@@ -315,8 +400,9 @@ class StdoutLogger(CorrelationalLogger):
         correlator: ContextualCorrelator,
         log_level: LogLevel = LogLevel.DEBUG,
         logger_id: str | None = None,
+        output_format: str = "console",
     ) -> None:
-        super().__init__(correlator, log_level, logger_id)
+        super().__init__(correlator, log_level, logger_id, output_format)
         self.raw_logger.addHandler(logging.StreamHandler())
 
 
@@ -329,8 +415,9 @@ class FileLogger(CorrelationalLogger):
         correlator: ContextualCorrelator,
         log_level: LogLevel = LogLevel.DEBUG,
         logger_id: str | None = None,
+        output_format: str = "console",
     ) -> None:
-        super().__init__(correlator, log_level, logger_id)
+        super().__init__(correlator, log_level, logger_id, output_format)
 
         handlers: list[logging.Handler] = [
             logging.FileHandler(log_file_path),
@@ -356,34 +443,34 @@ class CompositeLogger(Logger):
             logger.set_level(log_level)
 
     @override
-    def trace(self, message: str) -> None:
+    def trace(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.trace(message)
+            logger.trace(message, **kwargs)
 
     @override
-    def debug(self, message: str) -> None:
+    def debug(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.debug(message)
+            logger.debug(message, **kwargs)
 
     @override
-    def info(self, message: str) -> None:
+    def info(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.info(message)
+            logger.info(message, **kwargs)
 
     @override
-    def warning(self, message: str) -> None:
+    def warning(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.warning(message)
+            logger.warning(message, **kwargs)
 
     @override
-    def error(self, message: str) -> None:
+    def error(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.error(message)
+            logger.error(message, **kwargs)
 
     @override
-    def critical(self, message: str) -> None:
+    def critical(self, message: str, **kwargs: Any) -> None:
         for logger in self._loggers:
-            logger.critical(message)
+            logger.critical(message, **kwargs)
 
     @override
     @contextmanager
@@ -409,3 +496,87 @@ class CompositeLogger(Logger):
             ]:
                 stack.enter_context(context)
             yield
+
+
+class LoggerFactory:
+    """Factory class for creating loggers with different output formats."""
+
+    @staticmethod
+    def create_logger(
+        correlator: ContextualCorrelator,
+        log_level: LogLevel = LogLevel.DEBUG,
+        output_format: str = "console",
+        logger_id: str | None = None,
+        log_file_path: Path | None = None,
+    ) -> Logger:
+        """
+        Create a logger with the specified configuration.
+
+        Args:
+            correlator: The contextual correlator for correlation IDs
+            log_level: The logging level
+            output_format: Either "console" or "json"
+            logger_id: Optional logger ID
+            log_file_path: Optional file path for file logging
+
+        Returns:
+            A configured logger instance
+        """
+        if log_file_path:
+            return FileLogger(
+                log_file_path=log_file_path,
+                correlator=correlator,
+                log_level=log_level,
+                logger_id=logger_id,
+                output_format=output_format,
+            )
+        else:
+            return StdoutLogger(
+                correlator=correlator,
+                log_level=log_level,
+                logger_id=logger_id,
+                output_format=output_format,
+            )
+
+    @staticmethod
+    def create_composite_logger(
+        correlator: ContextualCorrelator,
+        log_level: LogLevel = LogLevel.DEBUG,
+        output_format: str = "console",
+        logger_id: str | None = None,
+        log_file_path: Path | None = None,
+    ) -> CompositeLogger:
+        """
+        Create a composite logger that outputs to both console and file.
+
+        Args:
+            correlator: The contextual correlator for correlation IDs
+            log_level: The logging level
+            output_format: Either "console" or "json"
+            logger_id: Optional logger ID
+            log_file_path: File path for file logging
+
+        Returns:
+            A composite logger instance
+        """
+        loggers = [
+            StdoutLogger(
+                correlator=correlator,
+                log_level=log_level,
+                logger_id=logger_id,
+                output_format=output_format,
+            )
+        ]
+
+        if log_file_path:
+            loggers.append(
+                FileLogger(
+                    log_file_path=log_file_path,
+                    correlator=correlator,
+                    log_level=log_level,
+                    logger_id=logger_id,
+                    output_format=output_format,
+                )
+            )
+
+        return CompositeLogger(loggers)

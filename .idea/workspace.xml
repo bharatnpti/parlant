@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ac31d0a3-a902-457d-8730-2f68b7852aeb" name="Changes" comment="deleted: empty file">
+      <change beforePath="$PROJECT_DIR$/src/parlant/core/loggers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/parlant/core/loggers.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitRewordedCommitMessages">
+    <option name="commitMessagesMapping">
+      <RewordedCommitMessageMapping>
+        <option name="originalMessage" value="refactor: remove unnecessary azure-cognitiveservices-language-luis package&#10;fix: add missing Azure packages to dependencies&#10;&#10;- Add azure-cognitiveservices-language-luis and azure-identity as optional dependencies&#10;- Create azure extra group for easy installation&#10;- Fixes ModuleNotFoundError when importing azure.identity.aio.DefaultAzureCredential&#10;- Resolves pytest discovery error in test_azure_service.py&#10;&#10;Added packages manually to poetry.lock to avoid Poetry version upgrade.&#10;All Azure service tests now pass successfully.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+        <option name="rewordedMessage" value="refactor: remove unnecessary azure-cognitiveservices-language-luis package&#10;fix: add missing Azure packages to dependencies&#10;&#10;- Add azure-cognitiveservices-language-luis and azure-identity as optional dependencies&#10;- Create azure extra group for easy installation&#10;- Fixes ModuleNotFoundError when importing azure.identity.aio.DefaultAzureCredential&#10;- Resolves pytest discovery error in test_azure_service.py&#10;&#10;Added packages manually to poetry.lock to avoid Poetry version upgrade.&#10;All Azure service tests now pass successfully.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+      </RewordedCommitMessageMapping>
+    </option>
+    <option name="currentCommit" value="1" />
+    <option name="onto" value="4cb2564e116a527e59ee025177fa6d2b68415bd5" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="32vlPUojHdK6euHjsZLoYMsMiSN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "azure__ad"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-4f4e415b4190-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.26053.29" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ac31d0a3-a902-457d-8730-2f68b7852aeb" name="Changes" comment="docs: embedding-creation.md and server-startup-process.md" />
+      <created>1758308902358</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758308902358</updated>
+    </task>
+    <task id="LOCAL-00001" summary="m">
+      <option name="closed" value="true" />
+      <created>1758308982817</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1758308982817</updated>
+    </task>
+    <task id="LOCAL-00002" summary="deleted: empty file">
+      <option name="closed" value="true" />
+      <created>1758731615469</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1758731615469</updated>
+    </task>
+    <task id="LOCAL-00003" summary="deleted: empty file">
+      <option name="closed" value="true" />
+      <created>1758732678846</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1758732678846</updated>
+    </task>
+    <task id="LOCAL-00004" summary="deleted: empty file">
+      <option name="closed" value="true" />
+      <created>1758732731423</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1758732731423</updated>
+    </task>
+    <task id="LOCAL-00005" summary="deleted: empty file">
+      <option name="closed" value="true" />
+      <created>1758822014223</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1758822014223</updated>
+    </task>
+    <task id="LOCAL-00006" summary="deleted: empty file">
+      <option name="closed" value="true" />
+      <created>1758822837803</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758822837803</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="azure_ad" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="m" />
+    <MESSAGE value="feat: Add Azure AD authentication support to Azure OpenAI service&#10;&#10;- Add support for DefaultAzureCredential with proper token scope handling&#10;- Enhance Azure service to support both legacy API key and Azure AD authentication&#10;- Improve Azure service environment verification with better error handling&#10;- Update Azure embedder classes to use centralized authentication logic&#10;- Add comprehensive test suite with 27 test cases covering all authentication scenarios&#10;- Add detailed error messages and troubleshooting guidance for Azure AD authentication&#10;- Fix Azure AD token provider to use correct scope for Azure OpenAI services&#10;- Maintain backward compatibility with existing API key authentication&#10;&#10;Authentication priority:&#10;1. API Key (highest priority - backward compatibility)&#10;2. Azure AD (fallback when no API key)&#10;&#10;Azure AD authentication methods supported:&#10;- Azure CLI (az login)&#10;- Service Principal (environment variables)&#10;- Managed Identity (Azure resources)&#10;- Environment Credential&#10;- Workload Identity (Kubernetes)&#10;&#10;Closes: Azure AD authentication enhancement&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+    <MESSAGE value="fix: Address maintainer feedback for Azure service implementation&#10;&#10;- Add missing type annotations for token_provider and test_auth functions&#10;- Restructure tests from class-based to flat tests with natural language names&#10;- Follow project conventions for test naming (test_that_* pattern)&#10;- Maintain all 27 test cases with improved readability&#10;- Ensure compliance with ruff and mypy standards&#10;&#10;Addresses maintainer feedback about:&#10;- Missing type annotations in azure_service.py and test file&#10;- Test suite classes should be flat tests with natural language names&#10;- Alignment with existing project coding style and conventions&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+    <MESSAGE value="deleted: empty file" />
+    <MESSAGE value="fix: Resolve ruff and mypy linting issues in Azure test file&#10;&#10;- Remove unused imports (typing.Any)&#10;- Add proper TestSchema class for type checking&#10;- Fix type annotations for generator variables&#10;- Ensure all tests pass ruff and mypy strict checks&#10;- Maintain 27 passing test cases&#10;&#10;Validates maintainer feedback about IDE setup and coding standards.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+    <MESSAGE value="fix: add missing Azure packages to dependencies&#10;&#10;- Add azure-cognitiveservices-language-luis and azure-identity as optional dependencies&#10;- Create azure extra group for easy installation&#10;- Fixes ModuleNotFoundError when importing azure.identity.aio.DefaultAzureCredential&#10;- Resolves pytest discovery error in test_azure_service.py&#10;&#10;Added packages manually to poetry.lock to avoid Poetry version upgrade.&#10;All Azure service tests now pass successfully.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+    <MESSAGE value="fix: add missing Azure packages to dependencies&#10;&#10;- Add azure-cognitiveservices-language-luis and azure-identity as optional dependencies&#10;- Create azure extra group for easy installation&#10;- Fixes ModuleNotFoundError when importing azure.identity.aio.DefaultAzureCredential&#10;- Resolves pytest discovery error in test_azure_service.py&#10;&#10;Added packages manually to poetry.lock to avoid Poetry version upgrade.&#10;All Azure service tests now pass successfully.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: add missing Azure packages to dependencies&#10;&#10;- Add azure-cognitiveservices-language-luis and azure-identity as optional dependencies&#10;- Create azure extra group for easy installation&#10;- Fixes ModuleNotFoundError when importing azure.identity.aio.DefaultAzureCredential&#10;- Resolves pytest discovery error in test_azure_service.py&#10;&#10;Added packages manually to poetry.lock to avoid Poetry version upgrade.&#10;All Azure service tests now pass successfully.&#10;&#10;Signed-off-by: bharatnpti &lt;bharatnpti@gmail.com&gt;" />
+  </component>
+</project>
